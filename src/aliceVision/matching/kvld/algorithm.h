@@ -108,26 +108,6 @@ inline bool inside( int w, int h, int x,int y, double radius )
 	return( x - radius >= 0 && y - radius >= 0 && x + radius < w && y + radius < h );
 }
 
-inline bool anglefrom( const float& x, const float& y, float& angle )
-{
-	if( x != 0 )
-		angle = atan( y / x );
-	else if( y > 0 )
-		angle = PI_ / 2;
-	else if( y < 0 )
-		angle =- PI_ / 2;
-	else return false;
-
-	if( x < 0 )
-		angle += PI_;
-	while( angle < 0 )
-		angle += 2 * PI_;
-  while( angle >= 2 * PI_ )
-		angle -= 2 * PI_;
-	assert( angle >= 0 && angle < 2 * PI_ );
-	return true;
-}
-
 inline double angle_difference( const double angle1, const double angle2 )
 {
 	double angle = angle1 - angle2;

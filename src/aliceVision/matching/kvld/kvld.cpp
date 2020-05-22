@@ -75,7 +75,25 @@ void ImageScale::GradAndNorm( const Image< float >& I, Image< float >& angle, Im
       const float gx = I( y, x + 1 ) - I( y, x - 1 );
       const float gy = I( y + 1, x ) - I( y - 1, x );
 
-      if( !anglefrom( gx, gy, angle( y, x ) ) )
+		bool temp = true;
+		
+		if( gx != 0 )
+			angle( y, x ) = atan( gy / gx );
+		else if( gy > 0 )
+			angle( y, x ) = PI_ / 2;
+		else if( gy < 0 )
+			angle( y, x ) =- PI_ / 2;
+		else temp= false;
+
+		if( gx < 0 )
+			angle( y, x ) += PI_;
+		while( angle( y, x ) < 0 )
+			angle( y, x ) += 2 * PI_;
+		while( angle( y, x ) >= 2 * PI_ )
+			angle( y, x ) -= 2 * PI_;
+		assert( angle( y, x ) >= 0 && angle < 2 * PI_ );
+
+      if( !temp )
         angle( y, x ) = -1;
       m( y, x ) = std::hypot(gx, gy);
     }
@@ -98,6 +116,29 @@ int ImageScale::getIndex( const double r )const
     }
     return std::min(int(angles.size()-1), index);
   }
+}
+
+inline double VLD::get_orientation()const
+{
+	float dy = end_point[ 1 ] - begin_point[ 1 ];
+	float	dx = end_point[ 0 ] - begin_point[ 0 ];
+	float angle;
+	
+	if( dx != 0 )
+		angle = atan( dy / dx );
+	else if( dy > 0 )
+		angle = PI_ / 2;
+	else if( dy < 0 )
+		angle =- PI_ / 2;
+
+	if( dx < 0 )
+		angle += PI_;
+	while( angle < 0 )
+		angle += 2 * PI_;
+	while( angle >= 2 * PI_ )
+		angle -= 2 * PI_;
+
+	return angle;
 }
 
 template< typename T >
