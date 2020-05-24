@@ -38,6 +38,7 @@ env:
     # the path /home/travis/build/alicevision/AliceVisionDependencies/install-deps, which was where openExr was installed
     # when Alembic was built (see AliceVisionDependencies repository).
     - DEPS_INSTALL_PATH=${TRAVIS_BUILD_DIR}/../AliceVisionDependencies/install-deps
+    - CI = ./ci/travis
 
 
 before_install:
@@ -53,12 +54,12 @@ before_install:
 
 
 install:
- - ./ci/install-cmake.sh
- - ./ci/install-dependencies.sh
+ - ${CI}/install-cmake.sh
+ - ${CI}/install-dependencies.sh
 
 
 before_script:
-  - . ./ci/env.sh
+  - . ${CI}/env.sh
   - export CXX="g++-4.8"
   - export CTEST_OUTPUT_ON_FAILURE=1
   - export CMAKE_PREFIX_PATH="${DEPS_INSTALL_PATH}"
